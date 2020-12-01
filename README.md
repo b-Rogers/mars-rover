@@ -1,23 +1,15 @@
-### Base
+## Mars Rover Game
 
-⚛️ This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Insert Grid size within Grid X and Grid Y.
 
-### Build
+Insert starting coordinates within Coordinate X and Coordinate Y.
 
-⚛️ react-scripts https://github.com/facebook/create-react-app/tree/master/packages/react-scripts
+Insert starting cardinal direction(N,E,S,W).
 
-### Linting
+Use the keyress to move the Rover:
 
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier) eslint https://github.com/eslint/eslint with prettier https://github.com/prettier/prettier
+`L` = Left
+`R` = Right
+`M` = Move
 
-### Unit testing
-
-🐙 testing-library https://github.com/testing-library
-
-### Versioning and releases
-
-📦🚀 semantic-release https://github.com/semantic-release/semantic-release
-
-### CI
-
-:octocat: GitHub Actions https://github.com/actions
+See updated coordinates and cardinal direction within their respective fields.
