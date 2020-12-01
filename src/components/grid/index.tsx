@@ -1,17 +1,16 @@
+import { IState } from '../app/app-reducer';
 import './grid.scss';
 
 interface IGridProps {
-  gridSizeX: number;
-  gridSizeY: number;
-  coordinatesX: number;
-  coordinatesY: number;
+  gridSize: IState['gridSize'];
+  coordinates: IState['coordinates'];
 }
 
-export default function Grid(props: IGridProps) {
-  const grid = Array(props.gridSizeX + 1)
+export default function Grid({ gridSize, coordinates }: IGridProps) {
+  const grid = Array(gridSize.x + 1)
     .fill(null)
     .map((_, colId) => {
-      const rows = Array(props.gridSizeY + 1)
+      const rows = Array(gridSize.y + 1)
         .fill(null)
         .map((_, rowId, rowArray) => {
           const rowPosition = rowArray.length - 1 - rowId;
@@ -21,10 +20,9 @@ export default function Grid(props: IGridProps) {
               key={rowPosition}
               className={'grid__row'}
             >
-              {props.coordinatesX === colId &&
-                props.coordinatesY === rowPosition && (
-                  <div className={'grid__rover'} />
-                )}
+              {coordinates.x === colId && coordinates.y === rowPosition && (
+                <div className={'grid__rover'} />
+              )}
             </div>
           );
         });
