@@ -1,7 +1,8 @@
 import {
-  cardinalDirectionConverter,
-  validateDirection,
+  validateDegrees,
   findNewCoordinates,
+  degreesFromCardinalDirection,
+  cardinalDirectionFromDegrees,
 } from '../../utils';
 
 interface Ipayload {
@@ -9,57 +10,54 @@ interface Ipayload {
   name?: string;
 }
 
-interface Iaction {
+export interface IAction {
   type: string;
   payload?: Ipayload;
 }
 
-interface Istate {
-  gridSizeX: number;
-  gridSizeY: number;
-  coordinatesX: number;
-  coordinatesY: number;
-  cardinalDirection: string | number;
+export interface IState {
+  gridSize: {
+    x: number;
+    y: number;
+  };
+  coordinates: {
+    x: number;
+    y: number;
+  };
+  cardinalDirection: string;
 }
 
-export function reducer(state: Istate, action: Iaction): Istate {
-  let direction: number;
+export function reducer(state: IState, action: IAction): IState {
   switch (action.type) {
-    case 'KeyL':
+    case 'KeyL': {
       // Converts from Cardinal direction to degrees
-      direction =
-        (cardinalDirectionConverter(state.cardinalDirection) as number) - 90;
+      const degrees =
+        degreesFromCardinalDirection(state.cardinalDirection) - 90;
+      // Reset the degrees if it reaches 360
+      const validatedDegrees = validateDegrees(degrees);
+      return {
+        ...state,
+        cardinalDirection: cardinalDirectionFromDegrees(validatedDegrees),
+      };
+    }
+    case 'KeyR': {
+      // Converts from Cardinal direction to degrees
+      const degrees =
+        degreesFromCardinalDirection(state.cardinalDirection) + 90;
       // Reset the direction if it reaches 360
-      direction = validateDirection(direction);
+      const validatedDegrees = validateDegrees(degrees);
       // Update path to show route of rover
       return {
         ...state,
-        cardinalDirection: cardinalDirectionConverter(direction),
+        cardinalDirection: cardinalDirectionFromDegrees(validatedDegrees),
       };
-    case 'KeyR':
-      // Converts from Cardinal direction to degrees
-      direction =
-        (cardinalDirectionConverter(state.cardinalDirection) as number) + 90;
-      // Reset the direction if it reaches 360
-      direction = validateDirection(direction);
-      // Update path to show route of rover
-      return {
-        ...state,
-        cardinalDirection: cardinalDirectionConverter(direction),
-      };
+    }
     case 'KeyM':
       // Get new coordinates; based on direction and position
-      const {
-        coordinatesX,
-        coordinatesY,
-        cardinalDirection,
-      } = findNewCoordinates(state);
-      // Update path to show route of rover
+      const { coordinates } = findNewCoordinates(state);
       return {
         ...state,
-        coordinatesX: coordinatesX,
-        coordinatesY: coordinatesY,
-        cardinalDirection: cardinalDirection || state.cardinalDirection,
+        coordinates: coordinates,
       };
     case 'input':
       if (action.payload?.name && action.payload?.value) {

@@ -1,15 +1,44 @@
+import { ChangeEvent } from 'react';
+import { IState, IAction } from '../app/app-reducer';
 import './labels.scss';
 
 interface Ilabels {
-  gridSizeX: number;
-  gridSizeY: number;
-  coordinatesX: number;
-  coordinatesY: number;
-  cardinalDirection: string | number;
-  handleChange: any;
+  gridSize: IState['gridSize'];
+  coordinates: IState['coordinates'];
+  cardinalDirection: IState['cardinalDirection'];
+  dispatch: React.Dispatch<IAction>;
 }
 
-export default function Labels(props: Ilabels) {
+export default function Labels({
+  gridSize,
+  coordinates,
+  cardinalDirection,
+  dispatch,
+}: Ilabels) {
+  function handleChange({
+    target,
+  }: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) {
+    switch (target.type) {
+      case 'number':
+        return dispatch({
+          type: 'input',
+          payload: {
+            value: target.value,
+            name: target.name,
+          },
+        });
+      case 'select-one':
+        return dispatch({
+          type: 'select',
+          payload: {
+            value: target.value,
+          },
+        });
+      default:
+        throw new Error(`${target} handle failed`);
+    }
+  }
+
   return (
     <div data-testid="labels" className="label-wrapper">
       <label>
@@ -18,8 +47,8 @@ export default function Labels(props: Ilabels) {
           data-testid="gridSizeX"
           type="number"
           name="gridSizeX"
-          value={props.gridSizeX}
-          onChange={props.handleChange}
+          value={gridSize.x}
+          onChange={handleChange}
         />
       </label>
       <label>
@@ -28,8 +57,8 @@ export default function Labels(props: Ilabels) {
           data-testid="gridSizeY"
           type="number"
           name="gridSizeY"
-          value={props.gridSizeY}
-          onChange={props.handleChange}
+          value={gridSize.y}
+          onChange={handleChange}
         />
       </label>
       <label>
@@ -38,8 +67,8 @@ export default function Labels(props: Ilabels) {
           data-testid="coordinatesX"
           type="number"
           name="coordinatesX"
-          value={props.coordinatesX}
-          onChange={props.handleChange}
+          value={coordinates.x}
+          onChange={handleChange}
         />
       </label>
       <label>
@@ -48,8 +77,8 @@ export default function Labels(props: Ilabels) {
           data-testid="coordinatesY"
           type="number"
           name="coordinatesY"
-          value={props.coordinatesY}
-          onChange={props.handleChange}
+          value={coordinates.y}
+          onChange={handleChange}
         />
       </label>
       <label>
@@ -57,8 +86,8 @@ export default function Labels(props: Ilabels) {
         <select
           data-testid="cardinalDirection"
           name="cardinalDirection"
-          value={props.cardinalDirection}
-          onChange={props.handleChange}
+          value={cardinalDirection}
+          onChange={handleChange}
         >
           <option value="N">N</option>
           <option value="E">E</option>
