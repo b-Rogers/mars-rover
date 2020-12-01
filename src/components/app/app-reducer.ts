@@ -37,7 +37,6 @@ export function reducer(state: IState, action: IAction): IState {
         degreesFromCardinalDirection(state.cardinalDirection) - 90;
       // Reset the degrees if it reaches 360
       const validatedDegrees = validateDegrees(degrees);
-      console.log('KeyL', { degrees, validatedDegrees });
       return {
         ...state,
         cardinalDirection: cardinalDirectionFromDegrees(validatedDegrees),
@@ -49,7 +48,6 @@ export function reducer(state: IState, action: IAction): IState {
         degreesFromCardinalDirection(state.cardinalDirection) + 90;
       // Reset the direction if it reaches 360
       const validatedDegrees = validateDegrees(degrees);
-      // Update path to show route of rover
       return {
         ...state,
         cardinalDirection: cardinalDirectionFromDegrees(validatedDegrees),
