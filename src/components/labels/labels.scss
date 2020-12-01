@@ -1,0 +1,22 @@
+.label-wrapper {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  background: #f48c42;
+}
+
+label {
+  display: block;
+  padding: 20px;
+
+  input {
+    margin: 0 5px;
+    padding: 5px;
+  }
+}
+
+select {
+  height: 30px;
+  width: 100px;
+}  
+  
