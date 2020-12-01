@@ -5,10 +5,13 @@ export function cardinalDirectionFromDegrees(degrees: number) {
     case 0:
       return 'N';
     case 90:
+    case -270:
       return 'E';
     case 180:
+    case -180:
       return 'S';
     case 270:
+    case -90:
       return 'W';
     default:
       return 'N';
@@ -36,24 +39,35 @@ export function findNewCoordinates({
   gridSize,
 }: IState) {
   const degrees = degreesFromCardinalDirection(cardinalDirection);
+  let newCoordinates = coordinates;
   switch (degrees) {
     case 0:
-      coordinates.y += 1;
+      newCoordinates = {
+        ...coordinates,
+        y: coordinates.y + 1,
+      };
       break;
     case 90:
-      coordinates.x += 1;
+      newCoordinates = {
+        ...coordinates,
+        x: coordinates.x + 1,
+      };
       break;
     case 180:
-      coordinates.y -= 1;
+      newCoordinates = {
+        ...coordinates,
+        y: coordinates.y - 1,
+      };
       break;
     case 270:
-      coordinates.x -= 1;
+      newCoordinates = {
+        ...coordinates,
+        x: coordinates.x - 1,
+      };
       break;
   }
 
-  return {
-    coordinates: validateCoordinates(coordinates, gridSize),
-  };
+  return validateCoordinates(newCoordinates, gridSize);
 }
 
 export function validateDegrees(degrees: number) {
@@ -79,4 +93,13 @@ export function validateCoordinates(
     validatedCoordinates.y = 0;
   }
   return validatedCoordinates;
+}
+
+export function validateGridSize(gridSize: IState['gridSize']) {
+  const validatedGridSize = gridSize;
+  if (gridSize.x < 1) validatedGridSize.x = 1;
+  if (gridSize.y < 1) validatedGridSize.y = 1;
+  if (gridSize.x > 10) validatedGridSize.x = 10;
+  if (gridSize.y > 10) validatedGridSize.y = 10;
+  return validatedGridSize;
 }

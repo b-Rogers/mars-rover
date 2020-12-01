@@ -3,6 +3,8 @@ import {
   findNewCoordinates,
   degreesFromCardinalDirection,
   cardinalDirectionFromDegrees,
+  validateCoordinates,
+  validateGridSize,
 } from '../../utils';
 
 interface Ipayload {
@@ -35,6 +37,7 @@ export function reducer(state: IState, action: IAction): IState {
         degreesFromCardinalDirection(state.cardinalDirection) - 90;
       // Reset the degrees if it reaches 360
       const validatedDegrees = validateDegrees(degrees);
+      console.log('KeyL', { degrees, validatedDegrees });
       return {
         ...state,
         cardinalDirection: cardinalDirectionFromDegrees(validatedDegrees),
@@ -54,16 +57,34 @@ export function reducer(state: IState, action: IAction): IState {
     }
     case 'KeyM':
       // Get new coordinates; based on direction and position
-      const { coordinates } = findNewCoordinates(state);
       return {
         ...state,
-        coordinates: coordinates,
+        coordinates: findNewCoordinates(state),
       };
     case 'input':
-      if (action.payload?.name && action.payload?.value) {
+      const { name, value } = action.payload || {};
+      if (name && value) {
+        const gridSizeX = name.includes('gridSizeX');
+        const gridSizeY = name.includes('gridSizeY');
+        const coordinatesX = name.includes('coordinatesX');
+        const coordinatesY = name.includes('coordinatesY');
+
+        let newCoordinates = {
+          x: coordinatesX ? parseInt(value) : state.coordinates.x,
+          y: coordinatesY ? parseInt(value) : state.coordinates.y,
+        };
+        let newGridSize = {
+          x: gridSizeX ? parseInt(value) : state.gridSize.x,
+          y: gridSizeY ? parseInt(value) : state.gridSize.y,
+        };
+
+        newCoordinates = validateCoordinates(newCoordinates, state.gridSize);
+        newGridSize = validateGridSize(newGridSize);
+
         return {
           ...state,
-          [action.payload.name]: parseInt(action.payload.value),
+          gridSize: newGridSize,
+          coordinates: newCoordinates,
         };
       }
       return {
