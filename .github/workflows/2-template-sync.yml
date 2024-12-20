@@ -16,3 +16,4 @@ jobs:
         uses: AndreasAugustin/actions-template-sync@v2
         with:
           source_repo_path: b-Rogers/react-typescript-template
+          github_token: ${{ secrets.GITHUB_TOKEN }}
