@@ -15,4 +15,4 @@ jobs:
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v2
         with:
-          source_repo_path: https://github.com/b-Rogers/react-typescript-template
+          source_repo_path: b-Rogers/react-typescript-template
